@@ -1,0 +1,15 @@
+{
+  "extends": "../../tsconfig.base.json",
+  "compilerOptions": {
+    "outDir": "./dist",
+    "rootDir": "./src",
+    "strictPropertyInitialization": false,
+    "strict": false,
+    "baseUrl": ".",
+    "paths": {
+      "@tramia/shared": ["../../packages/shared/src"],
+      "@tramia/shared/*": ["../../packages/shared/src/*"]
+    }
+  },
+  "include": ["src/**/*"]
+}

@@ -1,0 +1,19 @@
+{
+  "name": "tramia",
+  "version": "1.0.0",
+  "private": true,
+  "description": "TRAMIA Virtual Assets Infrastructure Platform",
+  "workspaces": [
+    "apps/*",
+    "packages/*"
+  ],
+  "scripts": {
+    "start:api": "npm run start:dev --workspace=apps/api",
+    "start:admin": "npm run dev --workspace=apps/admin",
+    "build:api": "npm run build --workspace=apps/api",
+    "build:admin": "npm run build --workspace=apps/admin",
+    "seed": "npm run seed --workspace=apps/api",
+    "migration:run": "npm run migration:run --workspace=apps/api",
+    "migration:generate": "npm run migration:generate --workspace=apps/api"
+  }
+}
