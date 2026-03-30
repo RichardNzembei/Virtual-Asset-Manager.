@@ -1,6 +1,6 @@
-import { Injectable, Logger, NotFoundException, BadRequestException } from '@nestjs/common';
+import { Injectable, Logger, NotFoundException, BadRequestException, OnModuleInit } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { Repository } from 'typeorm';
+import { Repository, In } from 'typeorm';
 import { v4 as uuidv4 } from 'uuid';
 import { Order } from './entities/order.entity';
 import { Trade } from './entities/trade.entity';
@@ -10,7 +10,7 @@ import { WalletsService } from '../wallets/wallets.service';
 import { Asset } from '../wallets/entities/asset.entity';
 
 @Injectable()
-export class TradingService {
+export class TradingService implements OnModuleInit {
   private readonly logger = new Logger(TradingService.name);
   private lastPrices: Map<string, number> = new Map();
 
@@ -22,6 +22,61 @@ export class TradingService {
     private matchingEngine: MatchingEngineService,
     private walletsService: WalletsService,
   ) {}
+
+  async onModuleInit() {
+    await this.hydrateOrderBook();
+  }
+
+  private async hydrateOrderBook() {
+    const openOrders = await this.orderRepo.find({
+      where: { status: In(['OPEN', 'PARTIALLY_FILLED']) },
+      relations: ['pair'],
+    });
+
+    const pairs = await this.pairRepo.find();
+    const pairMap = new Map(pairs.map((p) => [p.id, p.symbol]));
+
+    let bidCount = 0;
+    let askCount = 0;
+
+    for (const order of openOrders) {
+      const pairSymbol = pairMap.get(order.pair_id);
+      if (!pairSymbol) continue;
+
+      this.matchingEngine.addOrderWithoutMatching(pairSymbol, {
+        orderId: order.id,
+        price: parseFloat(order.price),
+        quantity: parseFloat(order.quantity),
+        remainingQuantity: parseFloat(order.remaining_quantity),
+        side: order.side,
+        walletId: order.wallet_id,
+        customerId: order.customer_id,
+        timestamp: order.created_at,
+      });
+
+      if (order.side === 'BUY') bidCount++;
+      else askCount++;
+    }
+
+    // Set default last prices
+    this.lastPrices.set('BTC/tKES', 13000000);
+    this.lastPrices.set('ETH/tKES', 450000);
+    this.lastPrices.set('BTC/USDC', 100000);
+    this.lastPrices.set('USDC/tKES', 129);
+
+    // Override with most recent trade prices if available
+    for (const pair of pairs) {
+      const lastTrade = await this.tradeRepo.findOne({
+        where: { pair_id: pair.id },
+        order: { executed_at: 'DESC' },
+      });
+      if (lastTrade) {
+        this.lastPrices.set(pair.symbol, parseFloat(lastTrade.price));
+      }
+    }
+
+    this.logger.log(`Order book hydrated: ${bidCount} bids, ${askCount} asks across ${pairMap.size} pairs`);
+  }
 
   async getPairs() {
     return this.pairRepo.find({ where: { status: 'ACTIVE' }, relations: ['base_asset', 'quote_asset'] });

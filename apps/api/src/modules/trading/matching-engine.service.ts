@@ -99,6 +99,16 @@ export class MatchingEngineService {
     return matches;
   }
 
+  // Insert order into book WITHOUT running matching (for hydration from DB)
+  addOrderWithoutMatching(pairSymbol: string, entry: OrderBookEntry) {
+    const book = this.getOrCreateBook(pairSymbol);
+    if (entry.side === 'BUY') {
+      this.insertSorted(book.bids, entry, 'DESC');
+    } else {
+      this.insertSorted(book.asks, entry, 'ASC');
+    }
+  }
+
   removeOrder(pairSymbol: string, orderId: string, side: string): boolean {
     const book = this.getOrCreateBook(pairSymbol);
     const list = side === 'BUY' ? book.bids : book.asks;

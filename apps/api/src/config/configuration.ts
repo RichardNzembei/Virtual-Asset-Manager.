@@ -3,9 +3,9 @@ export default () => ({
   database: {
     host: process.env.S_DATABASE_HOST || 'localhost',
     port: parseInt(process.env.S_DATABASE_PORT || '3306', 10),
-    username: process.env.S_DATABASE_USER || 'siku_zangu',
+    username: process.env.S_DATABASE_USER || 'tramia',
     password: process.env.S_DATABASE_PASSWORD || 'Saint@mysql4',
-    name: process.env.S_DATABASE_NAME || 'tramia_dev',
+    name: process.env.S_DATABASE_NAME || 'tramia',
   },
   jwt: {
     secret: process.env.JWT_SECRET || 'tramia-jwt-secret',

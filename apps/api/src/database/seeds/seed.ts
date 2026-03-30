@@ -42,9 +42,9 @@ async function seed() {
     type: 'mysql',
     host: process.env.S_DATABASE_HOST || 'localhost',
     port: parseInt(process.env.S_DATABASE_PORT || '3306', 10),
-    username: process.env.S_DATABASE_USER || 'siku_zangu',
+    username: process.env.S_DATABASE_USER || 'tramia',
     password: process.env.S_DATABASE_PASSWORD || 'Saint@mysql4',
-    database: process.env.S_DATABASE_NAME || 'siku_zangu',
+    database: process.env.S_DATABASE_NAME || 'tramia',
     entities,
     synchronize: true,
     logging: false,
@@ -242,6 +242,9 @@ async function seed() {
     expected_yield: '12.00', distribution_frequency: 'QUARTERLY', lock_up_days: 180,
     offering_start: new Date('2026-01-15'), offering_end: new Date('2026-06-30'),
     status: 'ACTIVE', compliance_status: 'APPROVED', cma_reference: 'CMA-2026-TOK-00101',
+    legal_status: 'VERIFIED', spv_status: 'STRUCTURED',
+    escrow_wallet_id: escrowWallet.id, tokens_remaining: '200000',
+    valuer_name: 'Knight Frank Kenya', valuation_date: new Date('2026-01-10'),
   }));
 
   await reRepo.save(reRepo.create({
@@ -268,6 +271,7 @@ async function seed() {
     asset_value_kes: '120000000', min_investment_kes: '100',
     expected_yield: '4.80', distribution_frequency: 'QUARTERLY', lock_up_days: 180,
     status: 'PENDING_APPROVAL', compliance_status: 'PENDING',
+    legal_status: 'PENDING', spv_status: 'PENDING',
   }));
 
   await reRepo.save(reRepo.create({

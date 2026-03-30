@@ -9,6 +9,8 @@ import { JwtStrategy } from './strategies/jwt.strategy';
 import { Customer } from '../customers/entities/customer.entity';
 import { AdminUser } from '../admin/entities/admin-user.entity';
 import { Session } from './entities/session.entity';
+import { WalletsModule } from '../wallets/wallets.module';
+import { FiatGatewayModule } from '../fiat-gateway/fiat-gateway.module';
 
 @Module({
   imports: [
@@ -22,6 +24,8 @@ import { Session } from './entities/session.entity';
       }),
     }),
     TypeOrmModule.forFeature([Customer, AdminUser, Session]),
+    WalletsModule,
+    FiatGatewayModule,
   ],
   controllers: [AuthController],
   providers: [AuthService, JwtStrategy],

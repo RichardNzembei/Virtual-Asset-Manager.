@@ -1,0 +1,1 @@
+- [TRAMIA Platform Overview](project_overview.md) — Kenya-focused digital assets platform: NestJS API, React Native mobile, Next.js admin, MySQL, mock blockchain/banking integrations

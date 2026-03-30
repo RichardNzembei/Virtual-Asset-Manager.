@@ -74,12 +74,31 @@ export class TokenizedAsset {
 
   @Column({ length: 30, default: 'DRAFT' })
   status: string;
+  // DRAFT → PENDING_APPROVAL → LEGAL_REVIEW → CMA_APPROVED → CONTRACT_DEPLOYED → ACTIVE → CLOSED → MATURED
 
   @Column({ length: 30, default: 'PENDING' })
   compliance_status: string;
 
+  @Column({ length: 30, default: 'PENDING' })
+  legal_status: string; // PENDING, VERIFIED, FAILED
+
+  @Column({ length: 30, default: 'PENDING' })
+  spv_status: string; // PENDING, STRUCTURED, NOT_REQUIRED
+
   @Column({ length: 100, nullable: true })
   cma_reference: string;
+
+  @Column('uuid', { nullable: true })
+  escrow_wallet_id: string;
+
+  @Column({ type: 'decimal', precision: 36, scale: 18, default: 0 })
+  tokens_remaining: string;
+
+  @Column({ length: 200, nullable: true })
+  valuer_name: string;
+
+  @Column({ type: 'date', nullable: true })
+  valuation_date: Date;
 
   @Column({ type: 'json', nullable: true })
   documents: any;

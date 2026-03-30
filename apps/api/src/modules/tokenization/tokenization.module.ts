@@ -6,13 +6,14 @@ import { TokenHolding } from './entities/token-holding.entity';
 import { Investment } from './entities/investment.entity';
 import { Issuer } from './entities/issuer.entity';
 import { Asset } from '../wallets/entities/asset.entity';
+import { Wallet } from '../wallets/entities/wallet.entity';
 import { TokenizationService } from './tokenization.service';
 import { TokenizationController } from './tokenization.controller';
 import { WalletsModule } from '../wallets/wallets.module';
 
 @Module({
   imports: [
-    TypeOrmModule.forFeature([TokenizedAsset, RealEstateAsset, TokenHolding, Investment, Issuer, Asset]),
+    TypeOrmModule.forFeature([TokenizedAsset, RealEstateAsset, TokenHolding, Investment, Issuer, Asset, Wallet]),
     WalletsModule,
   ],
   controllers: [TokenizationController],

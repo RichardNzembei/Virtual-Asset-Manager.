@@ -17,13 +17,15 @@ export class SubmitAssetDto {
   @IsString()
   token_name: string;
 
+  @IsOptional()
   @IsNumber()
   @Min(0)
-  total_supply: number;
+  total_supply?: number; // Optional — calculated in Phase 3 from asset_value / token_price
 
+  @IsOptional()
   @IsNumber()
   @Min(0)
-  token_price_kes: number;
+  token_price_kes?: number; // Defaults to KES 100
 
   @IsNumber()
   @Min(0)

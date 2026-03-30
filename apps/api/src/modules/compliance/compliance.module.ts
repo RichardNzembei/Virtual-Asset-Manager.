@@ -8,13 +8,14 @@ import { FiatWithdrawal } from '../fiat-gateway/entities/fiat-withdrawal.entity'
 import { ComplianceService } from './compliance.service';
 import { ComplianceController } from './compliance.controller';
 import { TransactionMonitorService } from './transaction-monitor.service';
+import { SanctionsService } from './sanctions.service';
 
 @Module({
   imports: [
     TypeOrmModule.forFeature([AmlAlert, KycRecord, Customer, FiatDeposit, FiatWithdrawal]),
   ],
   controllers: [ComplianceController],
-  providers: [ComplianceService, TransactionMonitorService],
-  exports: [ComplianceService, TransactionMonitorService],
+  providers: [ComplianceService, TransactionMonitorService, SanctionsService],
+  exports: [ComplianceService, TransactionMonitorService, SanctionsService],
 })
 export class ComplianceModule {}
